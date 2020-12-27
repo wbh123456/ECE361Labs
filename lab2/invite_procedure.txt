@@ -1,0 +1,50 @@
+Invitation Explaination
+
+
+- Function description: 
+    Invite a user to a conference session
+
+- Invitation command: 
+    /invite <user id> <session id>
+
+- New Protocols: 
+    Name           | Packet Data               |    Description
+    ---------------+---------------------------+------------------------------------
+    INVITE         | <user_id,session_id>      |  Invite a user to a conference session
+    INVITE_FAILED  | <reason>                  |  Invitation failed
+    ACP            | <inviter_id,session_id>   |  Accept invitation  
+    DEC            | <inviter_id,session_id>   |  Decline invitation
+
+- Procedure:
+
+                                                                    Inviter send invitation using [INVITE]
+                                                                                    |
+                                                                                    |
+                                                                        Server receives invitation
+                                                                                    |
+                                                                                    |
+                                                                    Check if the invitation is valid (e.g. invalid user name, user not online)
+                                                                                    |
+                                        ____________________________________________|__________________________________
+                                        |                                                                             |
+                                       Yes                                                                            No                            
+                                        |                                                                             |
+                            Server sends the information to                                          Server informs the inviter that the 
+                            invitee using [INVITE]                                                   invitation is invalid using [INVITE_FAILED]
+                                        |
+                                        |
+                            Invitee receives the information
+                                        |
+            ____________________________|__________________________
+            |                                                     |
+         Accepts                                               Declines
+        invitaion                                             invitation
+            |                                                     |
+Invitee responds to server using [ACP]            Invitee responds to server using [DEC]  
+            |                                                     |
+            |                                                     |
+Server joins the invitee to the session             Server tells the inviter using [DEC] 
+            |
+            |
+Server tells the inviter using [ACP]    
+
